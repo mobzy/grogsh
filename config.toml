@@ -59,7 +59,7 @@ include_content = false
 
 [extra]
 # Author name, appears in footer.
-emily_author = "author name"
+emily_author = "mb"
 
 # Path to the header icon / favicon image.
 # Please save image to static/images
