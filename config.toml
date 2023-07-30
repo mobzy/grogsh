@@ -63,7 +63,7 @@ emily_author = "author name"
 
 # Path to the header icon / favicon image.
 # Please save image to static/images
-emily_icon = "/images/logo.png"
+emily_icon = "/images/logotest.webp"
 
 emily_favicon = "/images/favicon.png"
 
