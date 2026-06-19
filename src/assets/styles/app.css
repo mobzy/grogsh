@@ -1,5 +1,5 @@
-/* JetBrains Mono — monospace, legible, perfect for a terminal aesthetic */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap');
+/* JetBrains Mono is loaded via Astro's experimental font system (astro.config.ts)
+   and self-hosted at build time — no external CDN request at runtime */
 
 /* ─── Cascade layers ───────────────────────────────────────────────────────── */
 @layer theme, base, components;
@@ -51,13 +51,13 @@
 
 /* ─── Base ──────────────────────────────────────────────────────────────────── */
 @layer base {
-  /* Monospace everywhere */
+  /* Monospace everywhere — var(--font-mono) is injected by Astro's font system */
   body,
   button,
   input,
   select,
   textarea {
-    font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
+    font-family: var(--font-mono, 'JetBrains Mono', 'Courier New', monospace);
   }
 
   /* Balanced headings */

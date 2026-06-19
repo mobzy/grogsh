@@ -1,6 +1,6 @@
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import AstroPureIntegration from 'astro-pure'
-import { defineConfig } from 'astro/config'
+import { defineConfig, fontProviders } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 
@@ -107,6 +107,16 @@ export default defineConfig({
   // [Experimental]
   experimental: {
     contentIntellisense: true,
-    svgo: true
+    svgo: true,
+    fonts: [
+      {
+        provider: fontProviders.google(),
+        name: 'JetBrains Mono',
+        cssVariable: '--font-mono',
+        styles: ['normal', 'italic'],
+        weights: [400, 500],
+        subsets: ['latin']
+      }
+    ]
   }
 })
