@@ -1,48 +1,140 @@
-/* Theme */
-:root {
-  /* Primary */
-  --primary: 200 29% 45%;
-  /* Foreground */
-  --foreground: 240 10% 3.9%;
-  --muted-foreground: 240 3.8% 28.1%;
-  /* Background */
-  --background: 210 33% 99%;
-  --muted: 240 4.8% 96%;
-  --card: 0 0% 90%;
+/* JetBrains Mono — monospace, legible, perfect for a terminal aesthetic */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap');
 
-  /* Basic */
-  --border: 240 5.9% 88%;
-  --input: 240 5.9% 90%;
-  --ring: 240 5.9% 10%;
-  --radius: 0.5rem;
-}
-.dark {
-  /* Primary */
-  --primary: 195 95% 85%;
-  /* Foreground */
-  --foreground: 0 0% 98%;
-  --muted-foreground: 240 5% 74.9%;
-  /* Background */
-  --background: 240 20.54% 5.2%;
-  --muted: 240 5.9% 13%;
-  --card: 240 3.7% 24.9%;
+/* ─── Cascade layers ───────────────────────────────────────────────────────── */
+@layer theme, base, components;
 
-  /* Basic */
-  --border: 240 3.7% 22.9%;
-  --input: 240 3.7% 17.9%;
-  --ring: 240 4.9% 83.9%;
-}
-:root {
-  --un-default-border-color: hsl(var(--border) / 1);
-}
-html.dark {
-  color-scheme: dark;
+/* ─── Animated custom properties (bleeding-edge: @property) ────────────────── */
+@property --glow-size {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 12px;
 }
 
-/* Global */
-a {
-  transition: color 0.2s ease;
-  &:hover {
-    color: hsl(var(--primary) / var(--un-text-opacity, 1));
+/* ─── Light mode — warm paper terminal ─────────────────────────────────────── */
+@layer theme {
+  :root {
+    --primary: 148 55% 30%;
+    --foreground: 148 25% 10%;
+    --muted-foreground: 148 12% 38%;
+    --background: 55 30% 97%;
+    --muted: 55 12% 91%;
+    --card: 55 8% 87%;
+    --border: 148 15% 72%;
+    --input: 55 10% 89%;
+    --ring: 148 55% 30%;
+    --radius: 0.125rem;
+  }
+
+  /* Dark mode — phosphor green CRT */
+  .dark {
+    --primary: 140 100% 52%;
+    --foreground: 140 38% 80%;
+    --muted-foreground: 140 16% 50%;
+    --background: 225 22% 5%;
+    --muted: 225 14% 9%;
+    --card: 225 12% 11%;
+    --border: 140 22% 18%;
+    --input: 225 12% 13%;
+    --ring: 140 100% 52%;
+    --radius: 0.125rem;
+  }
+
+  :root {
+    --un-default-border-color: hsl(var(--border) / 1);
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+}
+
+/* ─── Base ──────────────────────────────────────────────────────────────────── */
+@layer base {
+  /* Monospace everywhere */
+  body,
+  button,
+  input,
+  select,
+  textarea {
+    font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
+  }
+
+  /* Balanced headings */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+  }
+
+  /* Tabular figures for dates and numbers */
+  time,
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  a {
+    transition: color 0.2s ease;
+    &:hover {
+      color: hsl(var(--primary) / var(--un-text-opacity, 1));
+    }
+  }
+}
+
+/* ─── CRT overlay (subtle scanlines + vignette) ─────────────────────────────── */
+@layer components {
+  /* Scanlines using color-mix() — bleeding-edge */
+  html::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 1px,
+      color-mix(in oklch, black 3%, transparent) 1px,
+      color-mix(in oklch, black 3%, transparent) 2px
+    );
+  }
+
+  /* Phosphor glow on headings — dark mode only */
+  /* Uses @property transition on --glow-size */
+  .dark h1,
+  .dark h2 {
+    transition: --glow-size 0.4s ease;
+    text-shadow: 0 0 var(--glow-size) oklch(72% 0.27 145 / 0.35);
+
+    &:hover {
+      --glow-size: 22px;
+    }
+  }
+
+  /* Subtle glow on primary-colored interactive elements in dark mode */
+  .dark a:hover {
+    text-shadow: 0 0 8px oklch(72% 0.27 145 / 0.4);
+  }
+
+  /* Terminal cursor utility — blink on elements with data-cursor */
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  [data-cursor]::after {
+    content: '█';
+    font-size: 0.75em;
+    color: hsl(var(--primary));
+    animation: blink 1.1s step-end infinite;
+    margin-inline-start: 0.15em;
   }
 }
